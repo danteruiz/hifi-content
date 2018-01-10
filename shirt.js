@@ -6,14 +6,21 @@ function putEntityAcrossFromAvatar( avatar) {
     return position;
 }
 
+var shirt = "https://hifi-content.s3.amazonaws.com/jimi/avatar/photo-real/Clothes/TShirt.fbx";
+var jacket =  "https://hifi-content.s3.amazonaws.com/jimi/avatar/Niconico/fst/3/jacket.fbx";
+
 function init() {
+    var jointIndex = MyAvatar.getJointIndex("Spine1");
+    var jointPosition = MyAvatar.getJointPosition(jointIndex);
+    var jointRotation = MyAvatar.getJointRotation(jointIndex);
     var properties = {
-        name: "Soft Entity",
+        name: "Shirt",
         type: "Model",
-        modelURL: 'https://s3.amazonaws.com/hifi-public/ozan/avatars/albert/albert/albert.fbx',
-        relayParentJoints: true,
+        modelURL: shirt,
         parentID: MyAvatar.sessionUUID,
-        position: putEntityAcrossFromAvatar(MyAvatar)
+        relayParentJoints: true,
+        position: jointPosition,
+        orientation: jointRotation
     };
 
     if (!softEntity) {

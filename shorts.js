@@ -7,13 +7,18 @@ function putEntityAcrossFromAvatar( avatar) {
 }
 
 function init() {
+    var jointIndex = MyAvatar.getJointIndex("Spine");
+    var jointPosition = MyAvatar.getJointPosition(jointIndex);
+    var jointRotation = MyAvatar.getJointRotation(jointIndex);
+    print(MyAvatar.skeletonModelURL);
     var properties = {
-        name: "Soft Entity",
+        name: "Shirt",
         type: "Model",
-        modelURL: 'https://s3.amazonaws.com/hifi-public/ozan/avatars/albert/albert/albert.fbx',
-        relayParentJoints: true,
+        modelURL: "https://hifi-content.s3.amazonaws.com/jimi/avatar/photo-real/Clothes/Shorts.fbx",
         parentID: MyAvatar.sessionUUID,
-        position: putEntityAcrossFromAvatar(MyAvatar)
+        relayParentJoints: true,
+        position: jointPosition,
+        orientation: jointRotation
     };
 
     if (!softEntity) {
