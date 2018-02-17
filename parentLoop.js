@@ -49,11 +49,11 @@ function init() {
         position: putEntityAcrossFromAvatar(MyAvatar)
     };
     if (!avatarEntityOne) {
-        avatarEntityOne = Entities.addEntity(entityOneProperties);
+        avatarEntityOne = Entities.addEntity(entityOneProperties, true);
     }
 
     if (!avatarEntityTwo) {
-        avatarEntityTwo = Entities.addEntity(entityTwoProperties);
+        avatarEntityTwo = Entities.addEntity(entityTwoProperties, true);
     }
 }
 

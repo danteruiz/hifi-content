@@ -12,27 +12,13 @@ var jacket =  "https://hifi-content.s3.amazonaws.com/jimi/avatar/Niconico/fst/3/
 function init() {
     var jointIndex = MyAvatar.getJointIndex("Spine1");
     var jointPosition = MyAvatar.getJointPosition(jointIndex);
-    var jointRotation = MyAvatar.getJointRotation(jointIndex);
-    var userData = {
-        Attachment: {
-            action: "attach",
-            joint: "Spine1",
-            attached: false
-        },
-        grabbableKey: {
-            cloneable: false,
-            grabbable: true
-        }
-    };
     var properties = {
         name: "Shirt",
         type: "Model",
         modelURL: shirt,
         parentID: MyAvatar.sessionUUID,
         relayParentJoints: true,
-        //script: "http://localhost:8000/attachmentItemScript.js",
         position: jointPosition
-        //userData: JSON.stringify(userData)
     };
 
     if (!softEntity) {
