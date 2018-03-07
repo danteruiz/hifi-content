@@ -1,14 +1,15 @@
 var entity = null;
 
+
 function putEntityAcrossFromAvatar(avatar) {
     var avatarRot = Quat.fromPitchYawRollDegrees(0, avatar.bodyYaw, 0.0);
     var position = Vec3.sum(avatar.position, Vec3.multiply(1.5, Quat.getFront(avatarRot)));
     return position;
 }
 
-function init() {
+function createEntity() {
     var properties = {
-        name: "test",
+        name: "blackListEntity",
         type: "Sphere",
         position: putEntityAcrossFromAvatar(MyAvatar),
         dimensions: {x: 1, y: 1, z: 1},
@@ -17,18 +18,15 @@ function init() {
 
     if (!entity) {
         entity = Entities.addEntity(properties);
-        print(entity);
     }
 }
 
-function checkEntityParent() {
-    if (entity) {
-        var properties = Entities.getEntityProperties(entity);
-        if (properties.parentID !== MyAvatar.sessionUUID) {
-            //print("parent not the same");
-        }
-    }
-    Script.setTimeout(checkEntityParent, 200);
+function sendMessage(action) {
+    var message = {
+        action: action,
+        id: entity
+    };
+    Messages.sendLocalMessage("Hifi-Hand-RayPick-Blacklist", JSON.stringify(message));
 }
 
 function random() {
@@ -48,7 +46,6 @@ function setRandomColor() {
         };
 
         Entities.editEntity(entity, properties);
-        Entities.deleteEntity(entity);
     }
 }
 
@@ -57,13 +54,20 @@ function cleanup() {
     entity = null;
 }
 
-var MAPPING_NAME = "control";
-var controlMapping = Controller.newMapping(MAPPING_NAME);
-controlMapping.from(Controller.Hardware.Keyboard.Shift).peek().to(function(value) {
-    setRandomColor();
+Entities.mousePressOnEntity.connect(function(id, event) {
+    if (id === entity) {
+        print(id);
+        setRandomColor();
+    }
 });
-Controller.enableMapping(MAPPING_NAME);
 
-init();
+Controller.keyPressEvent.connect(function(event) {
+    if (event.key === 73) { // if 'i' button is pressed
+    } else if (event.key === 82) { // if 'r' button is pressed
+        sendMessage("remove");
+    }
+});
+
+createEntity();
+
 Script.scriptEnding.connect(cleanup);
-Script.setTimeout(checkEntityParent, 200);
