@@ -1,3 +1,6 @@
+JSON link  http://mpassets.highfidelity.com/3809f3ac-a842-43a2-af62-acfadbb72c7c-v1/mirror%20with%20handle.json
+JS link https://hifi-content.s3.amazonaws.com/patrickmanalich/mirrorFolder/mClient.js
+JS link https://hifi-content.s3.amazonaws.com/patrickmanalich/mirrorFolder/mServer.js
 JS link http://mpassets.highfidelity.com/20882ca3-2c0c-482d-b8ba-300dba0cc43a-v1/spectatorCamera.js
 processing http://mpassets.highfidelity.com/20882ca3-2c0c-482d-b8ba-300dba0cc43a-v1/spectatorCamera.js
 resolvePath            "modelURL": Script.resolvePath("spectator-camera.fbx"),
