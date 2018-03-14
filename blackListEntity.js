@@ -62,9 +62,10 @@ Entities.mousePressOnEntity.connect(function(id, event) {
 });
 
 Controller.keyPressEvent.connect(function(event) {
+    print(event.key);
     if (event.key === 73) { // if 'i' button is pressed
     } else if (event.key === 82) { // if 'r' button is pressed
-        sendMessage("remove");
+
     }
 });
 

@@ -1,2 +1,4 @@
 *.zip
 [Tt]emp/
+[Tt]est/
+[Ss]rc/
