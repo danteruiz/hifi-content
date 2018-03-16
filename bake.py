@@ -54,6 +54,14 @@ def bakeFilesInDirectory(directory, outputDirectory):
                 outputFolder = os.path.join(outputDirectory, os.path.relpath(root))
                 print "Baking file: " + filename
                 bakeFile(absFilePath, outputFolder)
+            else:
+                filePath = os.sep.join([root, filename])
+                absFilePath = os.path.abspath(filePath)
+                outputFolder = os.path.join(outputDirectory, os.path.relpath(root))
+                newFilePath = os.sep.join([outputFolder, filename])
+                createDirectory(outputFolder)
+                print "moving file: " + filename + " to: " + outputFolder
+                shutil.move(absFilePath, newFilePath)
 
 def createDirectory(directory):
     if not os.path.exists(directory):
