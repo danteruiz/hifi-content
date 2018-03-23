@@ -1,4 +1,4 @@
-import json, os, sys
+import json, os, sys, gzip
 
 prefix = 'file:///~/'
 MAP = {}
@@ -15,7 +15,7 @@ def createAssetMapping(assetDirectory):
                 finalPath = prefix + baseDirectory + '/' + filePath
                 finalPath = finalPath.replace('\\', '/')
                 file = os.path.splitext(filename)[0]
-                #file = os.path.splitext(file)[0]
+                file = os.path.splitext(file)[0]
                 MAP[file] = finalPath
 
 def hasURL(prop):
@@ -36,6 +36,7 @@ def handleURL(url):
 def main():
     if len(sys.argv) == 3:
         jsonFile = sys.argv[1]
+        gzipFile = jsonFile + '.gz'
         assetDirectory = sys.argv[2]
         createAssetMapping(assetDirectory)
         f = open(jsonFile)
@@ -62,9 +63,10 @@ def main():
 
                 entity[prop] = value
 
-        f = open(jsonFile, "w")
-        json.dump(data, f);
-        f.close()
 
+        jsonString = json.dumps(data)
+        jsonBytes= jsonString.encode('utf-8')
+        with gzip.GzipFile(gzipFile, 'w') as fout:   # 4. gzip
+            fout.write(jsonBytes)
 
 main()

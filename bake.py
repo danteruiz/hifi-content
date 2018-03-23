@@ -1,5 +1,5 @@
 import os, json, sys, shutil, subprocess, shlex, time
-EXE = 'C:/Users/dante/github/hifi/build/tools/oven/Release/oven'
+EXE = os.environ['HIFI_OVEN']
 LOG = 'C:/Users/dante/github/scripts/temp/testLog.txt'
 
 def listFiles(directory, extension):
@@ -61,20 +61,33 @@ def bakeFilesInDirectory(directory, outputDirectory):
                 newFilePath = os.sep.join([outputFolder, filename])
                 createDirectory(outputFolder)
                 print "moving file: " + filename + " to: " + outputFolder
-                shutil.move(absFilePath, newFilePath)
+                shutil.copy(absFilePath, newFilePath)
 
 def createDirectory(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+def checkIfExeExists:
+    if not os.path.isfile(EXE) and os.access(EXE, os.X_OK):
+        print 'HIFI_OVEN evironment variable is not set'
+        sys.exit()
+
+def handleOptions():
+    option = sys.argv[1]
+    if option == '--help' or option == '-h':
+        print 'Usage: bake.py INPUT[directory to bake] OUTPUT[directory to place backed files]'
+        print 'Note: If output directory will be created if directory does not exist'
+        sys.exit()
+
 def main():
-    if len(sys.argv) ==  3:
+    argsLength = len(sys.argv)
+    if len(sys.argv) == 3:
+        checkIfExeExists()
         rootDirectory = sys.argv[1]
         outputDirectory = os.path.abspath(sys.argv[2])
         createDirectory(outputDirectory)
         bakeFilesInDirectory(rootDirectory, outputDirectory)
-    else:
-        print("error")
-
+    else if argsLength == 2:
+        handleOptions()
 
 main()
