@@ -33,32 +33,7 @@ JSON link http://mpassets.highfidelity.com/8a07e07b-3be3-4015-bb46-9b58201af63f-
 JS link http://mpassets.highfidelity.com/4580f6a9-d6fd-4edb-84e8-16de4854f7da-v1/wardrobe.js
 processing http://mpassets.highfidelity.com/4580f6a9-d6fd-4edb-84e8-16de4854f7da-v1/wardrobe.js
 resolvePath        urlIndex: Script.resolvePath("html/wardrobe.html"),
-resolvePath        iconIndex: Script.resolvePath("icons/wardrobe.svg")
-JS link http://mpassets.highfidelity.com/524fe1bf-22c5-4b2e-9e0b-33cf054e1df8-v1/playTetherball.js
-processing http://mpassets.highfidelity.com/524fe1bf-22c5-4b2e-9e0b-33cf054e1df8-v1/playTetherball.js
-JSON link http://mpassets.highfidelity.com/31987a70-7a69-4ba8-b022-80f1d2320c93-v1/d2948ec8c6c3fd82ad11b20b8ce6c0dd.svo.json
-processing https://s3-us-west-1.amazonaws.com/hifi-content/clement/production/chess/chessPiece.js
-JSON link http://mpassets.highfidelity.com/a5f42695-f15a-4f44-9660-14b4f8ca2b29-v1/ConfettiGun.json
-processing http://mpassets.highfidelity.com/a5f42695-f15a-4f44-9660-14b4f8ca2b29-v1/confettigun.js
-resolvePath    SHOOT_SOUNDS.push(SoundCache.getSound(Script.resolvePath(SHOOT_SOUND_URLS[i])));
-resolvePath  var SUPRISE_SOUND = SoundCache.getSound(Script.resolvePath(SUPRISE_SOUND_URL));
-JS link http://mpassets.highfidelity.com/d87f440e-b561-4d67-99d3-f6c56c350ea7-v1/pingPongGun.js
-processing http://mpassets.highfidelity.com/d87f440e-b561-4d67-99d3-f6c56c350ea7-v1/pingPongGun.js
-JS link http://mpassets.highfidelity.com/c729a859-6733-4c1c-8909-93267bd2df4c-v2/pushToTalk.js
-processing http://mpassets.highfidelity.com/c729a859-6733-4c1c-8909-93267bd2df4c-v2/pushToTalk.js
-JS link http://mpassets.highfidelity.com/41f09ec3-976c-49f2-89fe-2d0e1a2b4a98-v1/webBrowser.js
-processing http://mpassets.highfidelity.com/41f09ec3-976c-49f2-89fe-2d0e1a2b4a98-v1/webBrowser.js
-JSON link http://mpassets.highfidelity.com/1487ff47-1c2b-438b-826f-734afed6a297-v1/spriteSheetDemo.json
-JS link http://mpassets.highfidelity.com/eecc1763-4cc9-45d8-934e-fb29828577d1-v1/app-events.js
-processing http://mpassets.highfidelity.com/eecc1763-4cc9-45d8-934e-fb29828577d1-v1/app-events.js
-requirevar moment = Script.require('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js');
-include: Script.include.call({ moment: moment }, 'https://momentjs.com/downloads/moment-timezone-with-data-2012-2022.min.js');
-resolvePath    icon: Script.resolvePath('app.svg'),
-found imported script : ('require', "'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js'", 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js', '')
-processing https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js
-JS link http://mpassets.highfidelity.com/86620c11-4411-4a74-b80f-930d4689d429-v1/app-wearablePlaneV1.1.js
-processing http://mpassets.highfidelity.com/86620c11-4411-4a74-b80f-930d4689d429-v1/app-wearablePlaneV1.1.js
-resolvePathvar planeIconActive = Script.resolvePath("planeIconBlack.svg");
+resolvePath        iconIndex: Script.resolvePath("icons/wardrobe.svg")resolvePathvar planeIconActive = Script.resolvePath("planeIconBlack.svg");
 resolvePathvar planeIconInactive = Script.resolvePath("planeIconWhite.svg");
 resolvePathvar planeURL = Script.resolvePath("ToyPlane_v2.fbx");
 resolvePathvar planeAnimationURL = Script.resolvePath("ToyPlane_v2_prop.fbx");

@@ -17,7 +17,7 @@ function putOverlayAcrossFromAvatar( avatar) {
 function init() {
     var properties = {
         name: "overlaySphere",
-        type: "Sphere",
+        type: "Cube",
         parentID: MyAvatar.SELF_ID,
         visible: true,
         position: putOverlayAcrossFromAvatar(MyAvatar)
