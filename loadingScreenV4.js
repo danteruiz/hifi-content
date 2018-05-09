@@ -2,12 +2,13 @@
 /* global Script, Controller, Overlays, Quat, MyAvatar, Entities, print, Vec3, AddressManager, Render, Window, Toolbars,
    Camera, HMD*/
 
-
+var VOLUME = 0.4;
+var tune = SoundCache.getSound("http://hifi-content.s3.amazonaws.com/dante/song/crystals_and_voices_2.wav");
 var DESTINATION_CARD_Y_OFFSET = -0.1;
 var DEFAULT_TONE_MAPPING_EXPOSURE = 0.0;
 var MIN_TONE_MAPPING_EXPOSURE = -5.0;
 var SYSTEM_TOOL_BAR = "com.highfidelity.interface.toolbar.system";
-var MAX_ELAPSED_TIME = 30 * 1000; // time in ms
+var MAX_ELAPSED_TIME = 16 * 1000; // time in ms
 function isInFirstPerson() {
     return (Camera.mode === "first person");
 }
@@ -131,7 +132,7 @@ function domainChanged(domain) {
 
 var THE_PLACE = "hifi://TheSpot";
 function clickedOnOverlay(overlayID, event) {
-    if (loadingToTheSpotID === overlayID && event.button === "Primary") {
+    if (loadingToTheSpotID === overlayID) {
         if (timerset) {
             timeElapsed = 0;
         }
@@ -179,6 +180,11 @@ function update() {
         if (!physicsEnabled && !timerset) {
             updateOverlays(physicsEnabled);
             timeElapsed = 0;
+            Audio.playSound(tune, {
+                localOnly: true,
+                position: MyAvatar.headPosition,
+                volume: VOLUME
+            });
             timerset = true;
         }
         previousPhysicsStatus = physicsEnabled;

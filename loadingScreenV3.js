@@ -1,13 +1,110 @@
 
 /* global Script, Controller, Overlays, Quat, MyAvatar, Entities, print, Vec3, AddressManager, Render, Window, Toolbars,
    Camera, HMD*/
-
-
+var MAX_X_SIZE = 3;
+var defaultOffset = 1.5;
+var hifi = "HighFidelity";
+var VOLUME = 0.4;
+var tune = SoundCache.getSound("http://hifi-content.s3.amazonaws.com/dante/song/crystals_and_voices_2.wav");
+var domainHostnameMap = {
+    eschatology: "Seth Alves",
+    blue: "Sam Cake",
+    thepines: "Roxie",
+    "dev-mobile": "HighFidelity",
+    "dev-mobile-master": "HighFidelity",
+    portalarium: "Bijou",
+    porange: "Caitlyn",
+    rust: hifi,
+    start: hifi,
+    miimusic: "Madysyn",
+    codex: "FluffyJenkins",
+    zaru: hifi,
+    help: hifi,
+    therealoasis: "Caitlyn",
+    vrmacy: "budgiebeats",
+    niccage: "OneLisa",
+    impromedia: "GeorgeDeac",
+    nest: "budgiebeats",
+    gabworld: "LeeGab",
+    vrtv: "GeoorgeDeac",
+    burrow: "budgiebeats",
+    leftcoast: "Lurks",
+    lazybones: "LazybonesJurassic",
+    skyriver: "Chamberlain",
+    chapel: "www.livin.today",
+    "hi-studio": hifi,
+    luskan: "jyoum",
+    arcadiabay: "Aitolda",
+    chime: hifi,
+    standupnow: "diva",
+    avreng: "GeorgeDeac",
+    atlas: "rocklin_guy",
+    steamedhams: "Alan_",
+    banff: hifi,
+    operahouse: hifi,
+    bankofhighfidelity: hifi,
+    tutorial: "WadeWatts",
+    nightsky: hifi,
+    garageband: hifi,
+    painting: hifi,
+    windwaker: "bijou",
+    fumbleland: "Lpasca",
+    monolith: "Nik",
+    bijou: "bijou",
+    morty: "bijou",
+    "hifiqa-rc-bots": hifi,
+    fightnight: hifi,
+    spirited: "Alan_",
+    "desert-oasis": "ryan",
+    springfield: "Alan_",
+    hall: "ryan",
+    "national-park": "ryan",
+    vector: "Nik",
+    bodymart: hifi,
+    "medievil-village": "ryan",
+    "villains-lair": "ryan",
+    "island-breeze": "ryan",
+    "classy-apartment": "ryan",
+    voxel: "FlameSoulis",
+    virtuoso: "noahglaseruc",
+    avatarisland: hifi,
+    ioab: "rocklin_guy",
+    tamait: "rocklin_guy",
+    konshulabs: "Konshu",
+    epic: "philip",
+    poopsburg: "Caitlyn",
+    east: hifi,
+    glitched: hifi,
+    calartsim: hifi,
+    calarts: hifi,
+    livin: "rocklin_guy",
+    fightclub: "philip",
+    thefactory: "whyroc",
+    wothal: "Alezia.Kurdis",
+    udacity: hifi,
+    json: "WadeWatts",
+    anonymous: "darlingnotin",
+    maker: hifi,
+    elisa: "elisahifi",
+    volxeltopia: hifi,
+    cupcake: hifi,
+    minigolf: hifi,
+    workshop: hifi,
+    vankh: "Alezia.Kurdis",
+    "the-crash-site": "WolfGang",
+    jjv360: "jjv3600",
+    distributed2: hifi,
+    anny: hifi,
+    university: hifi,
+    ludus: hifi,
+    stepford: "darlingnotin",
+    thespot: hifi
+};
 var DESTINATION_CARD_Y_OFFSET = -0.1;
 var DEFAULT_TONE_MAPPING_EXPOSURE = 0.0;
 var MIN_TONE_MAPPING_EXPOSURE = -5.0;
 var SYSTEM_TOOL_BAR = "com.highfidelity.interface.toolbar.system";
-var MAX_ELAPSED_TIME = 30 * 1000; // time in ms
+var MAX_ELAPSED_TIME = 16 * 1000; // time in ms
 function isInFirstPerson() {
     return (Camera.mode === "first person");
 }
@@ -31,14 +128,8 @@ var spinnerID = Overlays.addOverlay("model", {
     name: "Loading-spinner",
     localPosition: { x: 0, y: DESTINATION_CARD_Y_OFFSET, z: 5.5 },
     dimensions:  { x: 5.7, y: 0.01, z: 5.7 },
-    url: "http://hifi-content.s3.amazonaws.com/alan/dev/ring-animated-w-glow.fbx",
+    url: "http://hifi-content.s3.amazonaws.com/dante/entities/ring-w-glow.fbx",
     alpha: 1,
-    animationSettings: {
-        fps: 30,
-        loop: true,
-        running: true,
-        url: "http://hifi-content.s3.amazonaws.com/alan/dev/ring-animated-w-glow.fbx"
-    },
     visible: false,
     ignoreRayIntersection: true,
     drawInFront: true,
@@ -82,13 +173,14 @@ var domainNameTextID = Overlays.addOverlay("text3d", {
 
 var hostName = "";
 
-var domainHostname = Overlays.addOverlays("text3d", {
+var domainHostname = Overlays.addOverlay("text3d", {
     name: "Loading-Hostname",
-    localPosition: { x: 0.0, y: DESTINATION_CARD_Y_OFFSET + 0.1, z: 5.45 },
-    text: domainName,
+    localPosition: { x: 0.0, y: DESTINATION_CARD_Y_OFFSET - 0.4, z: 5.45 },
+    leftMargin: 0.20,
+    text: hostName,
     textAlpha: 1,
     backgroundAlpha: 0,
-    lineHeight: 0.45,
+    lineHeight: 0.125,
     visible: false,
     ignoreRayIntersection: true,
     drawInFront: true,
@@ -97,11 +189,32 @@ var domainHostname = Overlays.addOverlays("text3d", {
     parentID: loadingSphereID
 });
 
-var loadingToTheSpotID = Overlays.addOverlay("image3d", {
+var progressBar = Overlays.addOverlay("cube", {
+    name: "Loading-ProgressBar",
+    localPosition: { x: 0.0 , y: DESTINATION_CARD_Y_OFFSET - 0.45, z: 5.6 },
+    dimensions: {
+        x: 0.7,
+        y: 0.08134997636079788,
+        z: 0.08134997636079788
+    },
+    scale: 0.11,
+    alpha: 1,
+    color: {red: 31, green: 198, blue: 166},
+    isSolid: true,
+    visible: false,
+    emissive: true,
+    ignoreRayIntersection: true,
+    drawInFront: true,
+    grabbable: false,
+    localOrientation: Quat.fromVec3Degrees({ x: 0.0, y: -180.0, z: 0.0 }),
+    parentID: loadingSphereID
+});
+
+var loadingToTheSpotID = Overlays.addOverlay("model", {
     name: "Loading-Destination-Card-Text",
-    localPosition: { x: 0.0 , y: DESTINATION_CARD_Y_OFFSET - 0.7, z: 5.35 },
-    url: "https://hifi-content.s3.amazonaws.com/dante/entities/Loading-button-mockup.png",
-    dimensions: { x: 1.7, y: 1.7, z: 0.001 },
+    localPosition: { x: 0.0 , y: DESTINATION_CARD_Y_OFFSET - 0.85, z: 5.45 },
+    url: "https://hifi-content.s3.amazonaws.com/dante/entities/go-to-button.fbx",
+    dimensions: { x: 1.8, y: 0.3, z: 0.2 },
     alpha: 1,
     visible: false,
     emissive: true,
@@ -134,6 +247,13 @@ function domainChanged(domain) {
         leftMargin: margin
     };
 
+    var BY = "by ";
+    var host = domainHostnameMap[location.placename];
+
+    var hostnameProperties = {
+        text: BY + host
+    };
+
     var myAvatarDirection = Vec3.UNIT_NEG_Z;
     var cardDirectionPrime = {x: 0 , y: 0, z: 5.5};
     var rotationDelta = Quat.rotationBetween(cardDirectionPrime, myAvatarDirection);
@@ -144,11 +264,14 @@ function domainChanged(domain) {
 
     Overlays.editOverlay(loadingSphereID, mainSphereProperties);
     Overlays.editOverlay(domainNameTextID, textProperties);
+    Overlays.editOverlay(domainHostname, hostnameProperties);
 }
 
 var THE_PLACE = "hifi://TheSpot";
 function clickedOnOverlay(overlayID, event) {
-    if (loadingToTheSpotID === overlayID && event.button === "Primary") {
+    print(overlayID + " other: " + loadingToTheSpotID);
+    print(event.button === "Primary");
+    if (loadingToTheSpotID === overlayID) {
         if (timerset) {
             timeElapsed = 0;
         }
@@ -185,6 +308,16 @@ function updateOverlays(physicsEnabled) {
     Overlays.editOverlay(spinnerID, properties);
     Overlays.editOverlay(domainNameTextID, properties);
     Overlays.editOverlay(loadTextID, properties);
+    Overlays.editOverlay(domainHostname, properties);
+    Overlays.editOverlay(progressBar, {
+        visible: !physicsEnabled,
+        localPosition: { x: -(0 / 2) + defaultOffset, y: DESTINATION_CARD_Y_OFFSET - 0.45, z: 5.6 },
+        dimensions: {
+            x: 0.0,
+            y: 0.08134997636079788,
+            z: 0.08134997636079788
+        }
+    });
 }
 
 function update() {
@@ -195,12 +328,17 @@ function update() {
     if (physicsEnabled !== previousPhysicsStatus) {
         if (!physicsEnabled && !timerset) {
             updateOverlays(physicsEnabled);
+            Audio.playSound(tune, {
+                localOnly: true,
+                position: MyAvatar.headPosition,
+                volume: VOLUME
+            });
             timeElapsed = 0;
             timerset = true;
         }
         previousPhysicsStatus = physicsEnabled;
     }
-
+    var progress = 0;
     if (timerset) {
         timeElapsed += deltaTime;
         print(timeElapsed);
@@ -208,7 +346,20 @@ function update() {
             updateOverlays(physicsEnabled);
             timerset = false;
         }
+
+        progress = (MAX_X_SIZE * timeElapsed) / MAX_ELAPSED_TIME;
     }
+    var properties = {
+        localPosition: { x: -(progress / 2) + defaultOffset, y: DESTINATION_CARD_Y_OFFSET - 0.45, z: 5.6 },
+        dimensions: {
+            x: progress,
+            y: 0.08134997636079788,
+            z: 0.08134997636079788
+        },
+        color: {red: 31, green: 198, blue: 166}
+    };
+
+    Overlays.editOverlay(progressBar, properties);
     Overlays.editOverlay(loadingSphereID, {
         position: Vec3.sum(MyAvatar.position, Vec3.multiplyQbyV(MyAvatar.orientation, {x: 0, y: 0.95, z: 0}))
     });
@@ -224,7 +375,9 @@ function cleanup() {
     Overlays.deleteOverlay(spinnerID);
     Overlays.deleteOverlay(loadingToTheSpotID);
     Overlays.deleteOverlay(domainNameTextID);
+    Overlays.deleteOverlay(progressBar);
     Overlays.deleteOverlay(loadTextID);
+    Overlays.deleteOverlay(domainHostname);
     try {
     }  catch (e) {
     }
