@@ -6,12 +6,21 @@ function putOverlayAcrossFromAvatar( avatar) {
     return position;
 }
 
+
+var userData = {
+};
 function init() {
+    var controllerRightHand = "_CAMERA_RELATIVE_CONTROLLER_RIGHTHAND";
+    var rightHand = "Head";
+    var jointIndex = MyAvatar.getJointIndex(rightHand);
     var properties = {
         name: "testEntity",
-        type: "Sphere",
+        type: "Box",
+        // modelURL: Script.resourcesPath() + "meshes/tablet-with-home-button-small-bezel.fbx",
         parentID: MyAvatar.sessionUUID,
-        position: putOverlayAcrossFromAvatar(MyAvatar)
+        localPosition: Vec3.ZERO,
+        parentJointIndex: jointIndex,
+        dimensions : {x: 0.3, y: 0.3, z: 0.3}
     };
 
     if (!entityID) {

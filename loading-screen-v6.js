@@ -1,114 +1,18 @@
-
 /* global Script, Controller, Overlays, Quat, MyAvatar, Entities, print, Vec3, AddressManager, Render, Window, Toolbars,
    Camera, HMD*/
 var MAX_X_SIZE = 3;
 var defaultOffset = 1.5;
 var hifi = "HighFidelity";
 var VOLUME = 0.4;
+var MAX_LEFT_MARGIN = 1.9;
+var INNER_CIRCLE_WIDTH = 4.7;
 var tune = SoundCache.getSound("http://hifi-content.s3.amazonaws.com/dante/song/crystals_and_voices_2.wav");
-var STABILITY = 3.0;
-var entitiesCount = 0;
-var entitiesReadyCount = 0;
-var entitiesStabilityCount = 0;
-var domainHostnameMap = {
-    eschatology: "Seth Alves",
-    blue: "Sam Cake",
-    thepines: "Roxie",
-    "dev-mobile": "HighFidelity",
-    "dev-mobile-master": "HighFidelity",
-    portalarium: "Bijou",
-    porange: "Caitlyn",
-    rust: hifi,
-    start: hifi,
-    miimusic: "Madysyn",
-    codex: "FluffyJenkins",
-    zaru: hifi,
-    help: hifi,
-    therealoasis: "Caitlyn",
-    vrmacy: "budgiebeats",
-    niccage: "OneLisa",
-    impromedia: "GeorgeDeac",
-    nest: "budgiebeats",
-    gabworld: "LeeGab",
-    vrtv: "GeoorgeDeac",
-    burrow: "budgiebeats",
-    leftcoast: "Lurks",
-    lazybones: "LazybonesJurassic",
-    skyriver: "Chamberlain",
-    chapel: "www.livin.today",
-    "hi-studio": hifi,
-    luskan: "jyoum",
-    arcadiabay: "Aitolda",
-    chime: hifi,
-    standupnow: "diva",
-    avreng: "GeorgeDeac",
-    atlas: "rocklin_guy",
-    steamedhams: "Alan_",
-    banff: hifi,
-    operahouse: hifi,
-    bankofhighfidelity: hifi,
-    tutorial: "WadeWatts",
-    nightsky: hifi,
-    garageband: hifi,
-    painting: hifi,
-    windwaker: "bijou",
-    fumbleland: "Lpasca",
-    monolith: "Nik",
-    bijou: "bijou",
-    morty: "bijou",
-    "hifiqa-rc-bots": hifi,
-    fightnight: hifi,
-    spirited: "Alan_",
-    "desert-oasis": "ryan",
-    springfield: "Alan_",
-    hall: "ryan",
-    "national-park": "ryan",
-    vector: "Nik",
-    bodymart: hifi,
-    "medievil-village": "ryan",
-    "villains-lair": "ryan",
-    "island-breeze": "ryan",
-    "classy-apartment": "ryan",
-    voxel: "FlameSoulis",
-    virtuoso: "noahglaseruc",
-    avatarisland: hifi,
-    ioab: "rocklin_guy",
-    tamait: "rocklin_guy",
-    konshulabs: "Konshu",
-    epic: "philip",
-    poopsburg: "Caitlyn",
-    east: hifi,
-    glitched: hifi,
-    calartsim: hifi,
-    calarts: hifi,
-    livin: "rocklin_guy",
-    fightclub: "philip",
-    thefactory: "whyroc",
-    wothal: "Alezia.Kurdis",
-    udacity: hifi,
-    json: "WadeWatts",
-    anonymous: "darlingnotin",
-    maker: hifi,
-    elisa: "elisahifi",
-    volxeltopia: hifi,
-    cupcake: hifi,
-    minigolf: hifi,
-    workshop: hifi,
-    vankh: "Alezia.Kurdis",
-    "the-crash-site": "WolfGang",
-    jjv360: "jjv3600",
-    distributed2: hifi,
-    anny: hifi,
-    university: hifi,
-    ludus: hifi,
-    stepford: "darlingnotin",
-    thespot: hifi
-};
-var DESTINATION_CARD_Y_OFFSET = -0.1;
+var sample = null;
+var DESTINATION_CARD_Y_OFFSET = 2;
 var DEFAULT_TONE_MAPPING_EXPOSURE = 0.0;
 var MIN_TONE_MAPPING_EXPOSURE = -5.0;
 var SYSTEM_TOOL_BAR = "com.highfidelity.interface.toolbar.system";
-var MAX_ELAPSED_TIME = 16 * 1000; // time in ms
+var MAX_ELAPSED_TIME = 15 * 1000; // time in ms
 function isInFirstPerson() {
     return (Camera.mode === "first person");
 }
@@ -117,7 +21,7 @@ var toolbar = Toolbars.getToolbar(SYSTEM_TOOL_BAR);
 var renderViewTask = Render.getConfig("RenderMainView");
 var loadingSphereID = Overlays.addOverlay("model", {
     name: "Loading-Sphere",
-    position: Vec3.sum(MyAvatar.position, Vec3.multiplyQbyV(MyAvatar.orientation, {x: 0, y: 0.95, z: 0})),
+    position:  Vec3.sum(Vec3.sum(MyAvatar.position, {x: 0.0, y: -1.0, z: 0.0}), Vec3.multiplyQbyV(MyAvatar.orientation, {x: 0, y: 0.95, z: 0})),
     orientation: Quat.multiply(Quat.fromVec3Degrees({x: 0, y: 180, z: 0}), MyAvatar.orientation),
     url: "http://hifi-content.s3.amazonaws.com/alan/dev/black-sphere.fbx",
     dimensions: { x: 12.408, y: 15.731, z: 12.408 },
@@ -192,27 +96,6 @@ var domainHostname = Overlays.addOverlay("text3d", {
     parentID: loadingSphereID
 });
 
-var progressBar = Overlays.addOverlay("cube", {
-    name: "Loading-ProgressBar",
-    localPosition: { x: 0.0 , y: DESTINATION_CARD_Y_OFFSET - 0.45, z: 5.6 },
-    dimensions: {
-        x: 0.7,
-        y: 0.08134997636079788,
-        z: 0.08134997636079788
-    },
-    scale: 0.11,
-    alpha: 1,
-    color: {red: 31, green: 198, blue: 166},
-    isSolid: true,
-    visible: false,
-    emissive: true,
-    ignoreRayIntersection: true,
-    drawInFront: true,
-    grabbable: false,
-    localOrientation: Quat.fromVec3Degrees({ x: 0.0, y: -180.0, z: 0.0 }),
-    parentID: loadingSphereID
-});
-
 var loadingToTheSpotID = Overlays.addOverlay("model", {
     name: "Loading-Destination-Card-Text",
     localPosition: { x: 0.0 , y: DESTINATION_CARD_Y_OFFSET - 0.85, z: 5.45 },
@@ -228,33 +111,36 @@ var loadingToTheSpotID = Overlays.addOverlay("model", {
     parentID: loadingSphereID
 });
 
-var TARGET_UPDATE_HZ = 60; // 50hz good enough, but we're using update
+var TARGET_UPDATE_HZ = 60;
 var BASIC_TIMER_INTERVAL_MS = 1000 / TARGET_UPDATE_HZ;
 var timerset = false;
 var lastInterval = Date.now();
 var timeElapsed = 0;
 
+
+function getLeftMargin(overlayID, text) {
+    var textSize = Overlays.textSize(overlayID, text);
+    var sizeDifference = ((INNER_CIRCLE_WIDTH - textSize.width) / 2);
+    var leftMargin = -(MAX_LEFT_MARGIN - sizeDifference);
+    return leftMargin;
+}
+
 function domainChanged(domain) {
     var name = AddressManager.placename;
     domainName = name.charAt(0).toUpperCase() + name.slice(1);
-    var domainNameLength = domainName.length;
-    var localPosition = { x: 0.0, y: DESTINATION_CARD_Y_OFFSET + 0.1, z: 5.45 };
-    var margin = 0.0;
-    if (domainNameLength > 4) {
-        var divider = (domainNameLength >= 15) ? 2 : 3;
-        localPosition.x = (0.1486 * (domainNameLength / divider));
-    }
+    var domainLeftMargin = getLeftMargin(domainNameTextID, domainName);
     var textProperties = {
         text: domainName,
-        localPosition: localPosition,
-        leftMargin: margin
+        leftMargin: domainLeftMargin
     };
 
     var BY = "by ";
     var host = domainHostnameMap[location.placename];
-
+    var text = BY + host;
+    var hostLeftMargin = getLeftMargin(domainHostname, text);
     var hostnameProperties = {
-        text: BY + host
+        text: BY + host,
+        leftMargin: hostLeftMargin
     };
 
     var myAvatarDirection = Vec3.UNIT_NEG_Z;
@@ -268,8 +154,6 @@ function domainChanged(domain) {
     Overlays.editOverlay(loadingSphereID, mainSphereProperties);
     Overlays.editOverlay(domainNameTextID, textProperties);
     Overlays.editOverlay(domainHostname, hostnameProperties);
-    currentPrgrogress = 0;
-    target = 0;
 }
 
 var THE_PLACE = "hifi://TheSpot";
@@ -283,12 +167,7 @@ function clickedOnOverlay(overlayID, event) {
         AddressManager.handleLookupString(THE_PLACE);
     }
 }
-var previousCameraMode = Camera.mode;
-var previousPhysicsStatus = 99999;
 
-function lerp(a, b, t) {
-    return ((1 - t) * a + t * b);
-}
 function updateOverlays(physicsEnabled) {
     var properties = {
         visible: !physicsEnabled
@@ -317,82 +196,42 @@ function updateOverlays(physicsEnabled) {
     Overlays.editOverlay(domainNameTextID, properties);
     Overlays.editOverlay(loadTextID, properties);
     Overlays.editOverlay(domainHostname, properties);
-    Overlays.editOverlay(progressBar, {
-        visible: !physicsEnabled,
-        localPosition: { x: -(0 / 2) + defaultOffset, y: DESTINATION_CARD_Y_OFFSET - 0.45, z: 5.6 },
-        dimensions: {
-            x: 0.0,
-            y: 0.08134997636079788,
-            z: 0.08134997636079788
-        }
-    });
 }
 
-var currentPrgrogress = 0;
-var target = 0;
-var loadingComplete = false;
 function update() {
     var physicsEnabled = Window.isPhysicsEnabled();
     var thisInterval = Date.now();
     var deltaTime = (thisInterval - lastInterval);
     lastInterval = thisInterval;
     if (physicsEnabled !== previousPhysicsStatus) {
-        if (!physicsEnabled) {
+        if (!physicsEnabled && !timerset) {
             updateOverlays(physicsEnabled);
-            Audio.playSound(tune, {
+            sample = Audio.playSound(tune, {
                 localOnly: true,
                 position: MyAvatar.headPosition,
                 volume: VOLUME
             });
             timeElapsed = 0;
-            loadingComplete = false; 
-            currentPrgrogress = 0;
-            target = 0;
-            previousPhysicsStatus = physicsEnabled;
-        } else if (physicsEnabled && loadingComplete) {
-            updateOverlays(physicsEnabled);
-            previousPhysicsStatus = physicsEnabled;
+            timerset = true;
         }
+        previousPhysicsStatus = physicsEnabled;
     }
-    if (!loadingComplete) {
-        var nearbyEntitiesReadyCount = Window.getPhysicsNearbyEntitiesReadyCount();
-        var stabilityCount = Window.getPhysicsNearbyEntitiesStabilityCount();
-        var nearbyEntitiesCount = Window.getPhysicsNearbyEntitiesCount();
 
-        var stabilityPercentage = (stabilityCount / STABILITY);
-        if (stabilityPercentage > 1) {
-            stabilityPercentage = 1;
+    if (timerset) {
+        timeElapsed += deltaTime;
+        print(timeElapsed);
+        if (timeElapsed >= MAX_ELAPSED_TIME) {
+            updateOverlays(true);
+            sample.stop();
+            sample = null;
+            timerset = false;
         }
 
-        var stabilityProgress = (MAX_X_SIZE * 0.75) * stabilityPercentage;
-        var entitiesLoadedPercentage = nearbyEntitiesReadyCount / nearbyEntitiesCount;
-        var entitiesLoadedProgress = (MAX_X_SIZE * 0.25) * entitiesLoadedPercentage;
-        var progress = stabilityProgress + entitiesLoadedProgress;
-
-        if (progress >= target) {
-            target = progress;
-        }
-
-        currentPrgrogress = lerp(currentPrgrogress, target, 0.2);
-        var properties = {
-            localPosition: { x: -(currentPrgrogress / 2) + defaultOffset, y: DESTINATION_CARD_Y_OFFSET - 0.45, z: 5.6 },
-            dimensions: {
-                x: currentPrgrogress,
-                y: 0.08134997636079788,
-                z: 0.08134997636079788
-            },
-            color: {red: 31, green: 198, blue: 166}
-        };
-
-        Overlays.editOverlay(progressBar, properties);
-        if (currentPrgrogress >= 2.9) {
-            loadingComplete = true;
-        }
     }
+
     Overlays.editOverlay(loadingSphereID, {
-        position: Vec3.sum(MyAvatar.position, Vec3.multiplyQbyV(MyAvatar.orientation, {x: 0, y: 0.95, z: 0}))
+        position:  Vec3.sum(Vec3.sum(MyAvatar.position, {x: 0.0, y: -1.0, z: 0.0}), Vec3.multiplyQbyV(MyAvatar.orientation, {x: 0, y: 0.95, z: 0}))
     });
-
     Script.setTimeout(update, BASIC_TIMER_INTERVAL_MS);
 }
 
@@ -405,7 +244,6 @@ function cleanup() {
     Overlays.deleteOverlay(spinnerID);
     Overlays.deleteOverlay(loadingToTheSpotID);
     Overlays.deleteOverlay(domainNameTextID);
-    Overlays.deleteOverlay(progressBar);
     Overlays.deleteOverlay(loadTextID);
     Overlays.deleteOverlay(domainHostname);
     try {
@@ -414,26 +252,3 @@ function cleanup() {
 }
 
 Script.scriptEnding.connect(cleanup);
-
-
-
-
-
-
-var userTips = [
-    "Visit TheSpot to explore featured Domains",
-    "Visit out docs online to learn more about scripting",
-    "Don't want others invading your personal space? Turn on the Bubble to keep them at a distance",
-    "Want to make a friend? Shake hands with them in VR?",
-    "Looking for a party? Visit Rust, where live DJs play to dance your heart out!",
-    "Have you visited BodyMart to check out the new avatars recently?",
-    "Did you know you can create your own entities? Use the create menu to import custom content!",
-    "We're open source! Feel free to contribute to our open source code on GitHub!",
-    "What emotes have you used in the emote app?",
-    "Take and share your snapshots with everyone using the Snap app",
-    "Did you know you can show websites in-world by creating a web entity?",
-    "Did you know that you can check information about domains via our website?",
-    "Add cool new apps to your tablet by visiting the 'Apps' category in the Marketplace",
-    "You can print your snaps from the snaps app to share your best work with those around you",
-    "Log in to make friends, visit new domains, and save avatars and items"
-];
