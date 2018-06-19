@@ -15,12 +15,13 @@ function init() {
     var jointIndex = MyAvatar.getJointIndex(rightHand);
     var properties = {
         name: "testEntity",
-        type: "Box",
+        type: "Text",
         // modelURL: Script.resourcesPath() + "meshes/tablet-with-home-button-small-bezel.fbx",
         parentID: MyAvatar.sessionUUID,
         localPosition: Vec3.ZERO,
         parentJointIndex: jointIndex,
-        dimensions : {x: 0.3, y: 0.3, z: 0.3}
+        dimensions : {x: 0.3, y: 0.3, z: 0.3},
+        text: "Hello"
     };
 
     if (!entityID) {
