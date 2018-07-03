@@ -1,5 +1,6 @@
-Menu.addMenu("dante");
+
+Menu.addMenu("menuCrash");
 
 Script.scriptEnding.connect(function() {
-     Menu.removeMenu("dante");
+    Menu.removeMenu("menuCrash");
 });
