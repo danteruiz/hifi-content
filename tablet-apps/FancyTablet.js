@@ -1,7 +1,7 @@
 'use strictt';
 
 (function() {
-    var FANCY_TABLET_SOURCE = Script.resolvePath("./qml/FancyTablet.qml");
+    var FANCY_TABLET_SOURCE = Script.resolvePath("./html/FancyTablet.html");
     var tablet = Tablet.getTablet("com.highfidelity.interface.tablet.system");
 
     var buttonProperties = {
@@ -10,9 +10,17 @@
     var button = tablet.addButton(buttonProperties);
     button.clicked.connect(onClicked);
     function onClicked() {
-        tablet.loadQMLSource(FANCY_TABLET_SOURCE);
+        tablet.gotoWebScreen(FANCY_TABLET_SOURCE);
     }
 
+
+    function fromQml(message) {
+        if (message.hasOwnProperty("fancyTablet")) {
+            print(message.fancyTablet.type);
+        }
+    }
+
+    tablet.fromQml.connect(fromQml);
 
     Script.scriptEnding.connect(function() {
         if (button) {
