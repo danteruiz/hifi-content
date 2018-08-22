@@ -1,2 +1,0 @@
-				   Serveless Domain Test Plan
-- load a servelessDomain
