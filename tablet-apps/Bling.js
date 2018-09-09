@@ -1,11 +1,13 @@
 // Bling.js
 
 (function() {
-    var BLING_TABLET_SOURCE = Script.resolvePath("./html/FancyTablet.html");
+    var BLING_TABLET_SOURCE = Script.resolvePath("./html/Bling.html");
+    var BLING_SVG = Script.resolvePath("./images/diamond3.svg");
     var tablet = Tablet.getTablet("com.highfidelity.interface.tablet.system");
 
     var buttonProperties = {
-        text: "BLING"
+        text: "BLING",
+	icon: BLING_SVG
     };
     var button = tablet.addButton(buttonProperties);
     button.clicked.connect(onClicked);

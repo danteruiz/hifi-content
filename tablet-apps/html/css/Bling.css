@@ -1,0 +1,33 @@
+/* Bling.css */
+
+body {font-family: Arial;}
+
+/* Style the tab */
+
+
+.skins {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    height: 85vh;
+    display: block
+}
+
+.skins button {
+    background-color: #4CAF50; /* Green background */
+    border: 1px solid green; /* Green border */
+    color: white; /* White text */
+    padding: 30px 48px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    width: 100%; /* Set a width if needed */
+    display: block; /* Make the buttons appear below each other */
+}
+
+.skins button:not(:last-child) {
+    border-bottom: none
+}
+
+.skin button:hover {
+    background-color: #3e8e41
+}
+
