@@ -128,7 +128,6 @@
             var overlayXform = new Xform(overlayOrientation, overlayPosition);
             var overlayInv = overlayXform.inv();
             lastLocalPosition = overlayInv.xformPoint(worldPosition);
-         
             print("mousePressOnOverlay");
         }
     }
@@ -150,7 +149,8 @@
 
                 var offset = stylusTipOverlay.z - 0.009;
                 Overlays.editOverlay(secondKey, {localPosition: Vec3.sum(localPos, {x: 0, y: 0, z: offset / 4})});
-                print(offset);
+                print("stylusTipOverlay: " + JSON.stringify(stylusTipOverlay));
+                print("offset: " + offset);
             }
         }
     }
