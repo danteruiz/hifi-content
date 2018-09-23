@@ -20,4 +20,8 @@
 
     gamepadMapping.enable();
     print(JSON.stringify(Controller.Hardware.GamePad));
+
+
+    Script.scriptEnding.connect(function() {
+    });
 }());

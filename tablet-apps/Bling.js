@@ -15,12 +15,16 @@
     button.clicked.connect(onClicked);
 
     function tabletMeshes() {
-	var model = Graphics.getModel(HMD.tabletID);
-	print(JSON.stringify(model));
+        print(HMD.tabletID);
+        if (HMD.tabletID !== Uuid.NULL) {
+	        var model = Graphics.getModel(HMD.tabletID);
+	        print(JSON.stringify(model.meshes[0]));
+        }
     }
+
     function onClicked() {
 	if (!isOpened) {
-            tablet.gotoWebScreen(BLING_TABLET_SOURCE);
+        tablet.gotoWebScreen(BLING_TABLET_SOURCE);
 	    tabletMeshes();
 	} else {
 	    tablet.gotoHomeScreen();
