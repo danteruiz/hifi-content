@@ -23,5 +23,6 @@
 
 
     Script.scriptEnding.connect(function() {
+        Camera.mode = "first person";
     });
 }());
