@@ -68,15 +68,15 @@
         "ignoreRayIntersection": false
     });
     var localPos = {x: 0.05, y: 0.0, z: 0.0};
-    secondKey = Overlays.addOverlay("cube", {
+    secondKey = Overlays.addOverlay("model", {
         "solid": true,
         "parentID": anchor,
         "visible": true,
-        //"url": DEFAULT_KEY_MODEL,
+        "url": DEFAULT_KEY_MODEL,
         "alpha": 0.7,
         "localPosition": {x: 0.05, y: 0.0, z: 0.0},
         "dimensions": {x: 0.04, y: 0.04, z: 0.009},
-        //"textures": {"tex.picture": "http://hifi-content.s3.amazonaws.com/alexia/Keyboard/KeysBlack/P_key_black.png"},
+        "textures": {"tex.picture": "http://hifi-content.s3.amazonaws.com/alexia/Keyboard/KeysBlack/P_key_black.png"},
         "ignoreRayIntersection": false
     });
 

@@ -8,6 +8,7 @@
         dimensions: {x: 0.003, y: 0.003, z: 0.003},
         ignoreRayIntersection: true,
         visible: true,
+        drawInFront: true,
         alpha: 1.0
     });
 

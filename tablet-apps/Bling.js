@@ -9,7 +9,7 @@
 
     var buttonProperties = {
         text: "BLING",
-	icon: BLING_SVG
+	    icon: BLING_SVG
     };
     var button = tablet.addButton(buttonProperties);
     button.clicked.connect(onClicked);
