@@ -2,10 +2,23 @@
 
 (function() {
     var GAME_PAD = Controller.Hardware.GamePad;
+    var KEYBOARD = Controller.Hardware.Keyboard;
     Camera.mode = "independent";
 
-    var gamepadMapping = Controller.newMapping("gamepad");
-    gamepadMapping.from(GAME_PAD.R3).to(function(clicked) {
+    function resetCameraPosition() {
+        var myAvatarPosition = MyAvatar.position;
+        var myAvatarOrientation = MyAvatar.orientation;
+
+        var myAvatarFront = Quat.getFront(myAvatarOrientation);
+        var cameraPosition = Vec3.sum(myAvatarPosition, Vec3.multiply(-2, myAvatarFront));
+
+        Camera.position = cameraPosition;
+    }
+
+    resetCameraPosition();
+
+    var gamepadMapping = Controller.newMapping("ThirdPersonCamera");
+    /*gamepadMapping.from(GAME_PAD.R3).to(function(clicked) {
 	    if (clicked) {
 	    }
     });
@@ -40,6 +53,24 @@
 
     gamepadMapping.from(GAME_PAD.RX).to(function(clicked) {
         print("RX: " + clicked);
+    });*/
+
+    gamepadMapping.from(KEYBOARD.MiddleMouseClicked).to(function(pressed) {
+        print("MiddleMouseClicked: " + pressed);
+    });
+
+    gamepadMapping.from(KEYBOARD.MouseMoveLeft).to(function(value) {
+        print("MouseMoveLeft: " + value);
+    });
+
+    gamepadMapping.from(KEYBOARD.MouseMoveRight).to(function(value) {
+        print("MouseMoveRight: " + value);
+    });
+
+    gamepadMapping.from(KEYBOARD.MouseMoveUp).to(function(value) {
+    });
+
+    gamepadMapping.from(KEYBOARD.MouseMoveDown).to(functino(value) {
     });
 
     gamepadMapping.enable();
