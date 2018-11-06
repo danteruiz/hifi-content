@@ -1,8 +1,8 @@
 // Bling.js
 
 (function() {
-    var BLING_TABLET_SOURCE = Script.resolvePath("./html/Bling.html");
-    var BLING_SVG = Script.resolvePath("./images/diamond3.svg");
+    var BLING_TABLET_SOURCE = Script.resolvePath("./qml/Bling.qml");
+    var BLING_SVG = Script.resolvePath("./images/Bling.svg");
     var tablet = Tablet.getTablet("com.highfidelity.interface.tablet.system");
 
     var isOpened = false;
@@ -23,14 +23,14 @@
     }
 
     function onClicked() {
-	if (!isOpened) {
-        tablet.gotoWebScreen(BLING_TABLET_SOURCE);
-	    tabletMeshes();
-	} else {
-	    tablet.gotoHomeScreen();
-	}
+	    if (!isOpened) {
+            tablet.loadQMLSource(BLING_TABLET_SOURCE);
+	        //tabletMeshes();
+	    } else {
+	        tablet.gotoHomeScreen();
+	    }
 
-	isOpened = !isOpened;
+	    isOpened = !isOpened;
     }
 
     function fromQml(message) {
