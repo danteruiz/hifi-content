@@ -1,21 +1,22 @@
-// loadKeyboardSkin
+// toggleKeyboard.js
 (function() {
-    var KEYBOARD_SKIN = Script.resourcesPath() + "config/keyboard.json";
-
-     var tablet = Tablet.getTablet("com.highfidelity.interface.tablet.system");
+    var tablet = Tablet.getTablet("com.highfidelity.interface.tablet.system");
 
     var buttonProperties = {
-        text: "KS"
+        text: "TT"
     };
 
+    var raised = Keyboard.raised;
     var button = tablet.addButton(buttonProperties);
     button.clicked.connect(onClicked);
-    function onClicked() {
-        print(KEYBOARD_SKIN);
-        Keyboard.raised = false;
-        Keyboard.loadKeyboardFile(KEYBOARD_SKIN);
-    }
 
+    function onClicked() {
+        raised = !raised;
+        Keyboard.raised = raised;
+        button.editProperties({
+            isActive: raised
+        });
+    }
 
     Script.scriptEnding.connect(function() {
         if (button) {
