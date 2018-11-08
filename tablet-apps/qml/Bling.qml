@@ -75,8 +75,20 @@ Rectangle {
 
                 Rectangle {
                     id: editArea
-                    width: mouseArea.containsMouse ? parent.width * 0.15 : 0.0
+                    width: 0.0
                     radius: 3
+
+                    NumberAnimation on width {
+                        running: mouseArea.containsMouse
+                        from: 0.0
+                        to: parent.width * 0.15
+                    }
+
+                    NumberAnimation on width {
+                        running: !mouseArea.containsMouse && editArea.width > 0.0
+                        from: editArea.width
+                        to: 0.0
+                    }
                     anchors {
                         right: parent.right
                         rightMargin: 1.0
