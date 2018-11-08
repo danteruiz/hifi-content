@@ -1,7 +1,7 @@
 (function() {
     var material = Entities.addEntity({
         type: "Material",
-        position: Vec3.sum(MyAvatar.position, Vec3.multiplyQbyV(MyAvatar.orientation, { x: 0, y: 0.67, z: -2 })),
+        position: Vec3.sum(MyAvatar.position, Vec3.multiplyQbyV(MyAvatar.orientation, { x: 0, y: 0.3, z: -1 })),
         visible: true,
         materialURL: "materialData",
         materialData: JSON.stringify({
@@ -11,11 +11,11 @@
                 albedo: [1.0, 0.86, 0.0],
                 roughness: 0.745,
                 metallic: 1.0,
-                roughnessMap: "http://localhost:8000/gold-scuffed_roughness.png",
-                normalMap: "http://localhost:8000/gold-scuffed_normal.png",
-                specularMap: "http://localhost:8000/gold-scuffed_metallic.png",
-                albedoMap: "http://localhost:8000/gold-scuffed_basecolor-boosted.png",
-                emissiveMap: "http://localhost:8000/glod-scuffed_basecolor.png"
+                roughnessMap: "https://dantescalves.com/hifi-content/images/gold-scuffed_roughness.png",
+                normalMap: "https://dantescalves.com/hifi-content/images/gold-scuffed_normal.png",
+                specularMap: "https://dantescalves.com/hifi-content/images/gold-scuffed_metallic.png",
+                albedoMap: "https://dantescalves.com/hifi-content/images/gold-scuffed_basecolor-boosted.png",
+                emissiveMap: "https://dantescalves.com/hifi-content/images/glod-scuffed_basecolor.png"
             }
         }, true)
     });
