@@ -8,6 +8,29 @@ Rectangle {
     height: parent.height
     color: "#021C1E"
 
+
+    signal sendToScript(var message);
+
+    function fromScript(message) {
+        if (message.hasOwnProperty("bling")) {
+            var action = message.action;
+
+            if (action === "updateList") {
+                updateSkinListData(message.data.skins);
+            }
+        }
+    }
+
+    function updateSkinListData(skinsObject) {
+        skinView.clearSkinList();
+        var skinKeys = Object.keys(skinsObject);
+        for (var keyIndex = 0; keyIndex < skinKeys.length; keyIndex++) {
+            var skinName = skinKeys[keyIndex];
+            var skinData = skinsObject[skinName];
+            skinView.addSkin(skinName, skinData);
+        }
+    }
+
     Rectangle {
         id: header
         z: 3
@@ -35,6 +58,8 @@ Rectangle {
             top: header.bottom
         }
 
+        property int activeSkinIndex: -1
+
         ListModel {
             id: skinList
         }
@@ -49,6 +74,7 @@ Rectangle {
                 radius: 3
                 property color defaultColor: index % 2 == 0 ? "#004445" : "#2C7873"
                 property color highlightColor: Qt.lighter(defaultColor)
+                property bool isActive: active
                 color: defaultColor
                 border.color: mouseArea.containsMouse ? Qt.darker(color) : Qt.lighter(color)
 
@@ -59,6 +85,20 @@ Rectangle {
                     color: "white"
                 }
 
+                Rectangle {
+                    width: 20
+                    height: 20
+                    radius: 10
+                    visible: isActive
+                    color: "#6FB98F"
+
+                    anchors {
+                        left: parent.left
+                        leftMargin: parent.width * 0.07
+                        verticalCenter: parent.verticalCenter
+                    }
+                }
+
                 MouseArea {
                     id: mouseArea
                     anchors.fill: parent
@@ -66,9 +106,28 @@ Rectangle {
 
                     onClicked: {
                         if (editArea.inEditArea()) {
-                            console.log("------> edit skin: " + skinName + " <-----");
+
                         } else {
-                            console.log("------> enabled skin: " + skinName + " <-----");
+                            var message = {
+                                bling: true
+                            };
+                            if (skinView.activeSkinIndex === index && isActive) {
+                                // disable tablet skin
+                                message.action = "clearActiveSkin";
+                                skinList.setProperty(index, "active", !isActive);
+                                skinView.activeSkinIndex = -1;
+                            } else {
+                                skinList.setProperty(skinView.activeSkinIndex, "active", false);
+                                skinList.setProperty(index, "active", !isActive);
+
+                                if (isActive) {
+                                    message.action = "applySkin";
+                                    message.data = skinData;
+                                    skinView.activeSkinIndex = index;
+                                }
+                            }
+
+                            root.sendToScript(message);
                         }
                     }
                 }
@@ -123,8 +182,17 @@ Rectangle {
         model: skinList
         delegate: listDelegate
 
-        function addSkin(skin) {
-            skinList.append({"skinName": skin});
+
+        function clearSkinList() {
+            skinList.clear();
+        }
+
+        function addSkin(skin, data) {
+            skinList.append({
+                "skinName": skin,
+                "skinData": data,
+                "active": false
+            });
         }
     }
 
@@ -163,8 +231,12 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        for (var index = 0; index < 10; index++) {
-            skinView.addSkin(index);
-        }
+        var message  = {
+            bling: true,
+            action: "initialize",
+        };
+
+        root.sendToScript(message);
+        console.log("sending to root");
     }
 }
