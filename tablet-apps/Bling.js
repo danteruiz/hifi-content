@@ -49,7 +49,7 @@
         var tabletID = HMD.tabletID;
         if (tabletID !== Uuid.NULL && tabletID !== null) {
 	        var model = Graphics.getModel(HMD.tabletID);
-            for (var index = 0; index < model.meshes.length; index++) {
+            for (var index = 0; index <= model.meshes.length + 1; index++) {
                 material.parentID = tabletID;
                 material.parentMaterialName = index;
                 var entityID = Entities.addEntity(material, true);
