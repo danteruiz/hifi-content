@@ -22,14 +22,15 @@
                 albedoMap: "https://dantescalves.com/hifi-content/images/gold-scuffed_basecolor-boosted.png",
                 emissiveMap: "https://dantescalves.com/hifi-content/images/glod-scuffed_basecolor.png"
             }
-        });
+        })
     };
 
 
     var tabletID = HMD.tabletID;
     if (tabletID !== Uuid.NULL && tabletID !== null) {
 	    var model = Graphics.getModel(HMD.tabletID);
-        for (var index = 0; index < model.meshes.length; index++) {
+        for (var index = 1; index <= model.meshes.length + 1; index++) {
+            print("mesh name: " + model.meshes[index].objectName + " index: " + (index));
             goldMaterial.parentMaterialName = index;
             var entityID = Entities.addEntity(goldMaterial, true);
             materialEntities.push(entityID);
