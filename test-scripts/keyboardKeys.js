@@ -3,12 +3,12 @@
     Script.include("/~/system/libraries/Xform.js");
    // create overlays
     var DEFAULT_KEY_MODEL = Script.resourcesPath() + "meshes/keyboard/SM_key.fbx";
-    var MALLET_LENGTH = 0.2;
-    var MALLET_TOUCH_Y_OFFSET = 0.052;
-    var MALLET_Y_OFFSET = 0.180;
+    var MALLET_LENGTH = 0.18;
+    var MALLET_TOUCH_Y_OFFSET = 0.05;
+    var MALLET_Y_OFFSET = 0.16;
 
     var MALLET_ROTATION_OFFSET = {w: 0.70710678, x:0.0, y: -0.70710678, z:0.0};
-    var MALLET_MODEL_DIMENSIONS = {x: 0.03, y: MALLET_LENGTH, z: 0.03};
+    var MALLET_MODEL_DIMENSIONS = {x: 0.01, y: MALLET_LENGTH, z: 0.01};
     var MALLET_POSITION_OFFSET = {x: 0.0, y: (-MALLET_Y_OFFSET / 2.0), z: 0.0};
     var MALLET_TIP_OFFSET = {x: 0.0, y: (MALLET_LENGTH - MALLET_TOUCH_Y_OFFSET), z: 0.0};
     var tablet = Tablet.getTablet("com.highfidelity.interface.tablet.system");
