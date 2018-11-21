@@ -1,7 +1,7 @@
 'use strictt';
 
 (function() {
-    var FANCY_TABLET_SOURCE = Script.resolvePath("./html/FancyTablet.html");
+    var FANCY_TABLET_SOURCE = Script.resolvePath("c:/Users/dante/github/hifi-orientationstation/antigrav/AltGrav.qml");
     var tablet = Tablet.getTablet("com.highfidelity.interface.tablet.system");
 
     var buttonProperties = {
@@ -10,14 +10,12 @@
     var button = tablet.addButton(buttonProperties);
     button.clicked.connect(onClicked);
     function onClicked() {
-        tablet.gotoWebScreen(FANCY_TABLET_SOURCE);
+        tablet.loadQMLSource(FANCY_TABLET_SOURCE);
     }
 
 
     function fromQml(message) {
-        if (message.hasOwnProperty("fancyTablet")) {
-            print(message.fancyTablet.type);
-        }
+        print(JSON.stringify(message));
     }
 
     tablet.fromQml.connect(fromQml);

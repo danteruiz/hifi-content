@@ -1,8 +1,8 @@
 // loadKeyboardSkin
 (function() {
-    var KEYBOARD_SKIN = Script.resourcesPath() + "images/keyboard_Layout.svg";
+    var KEYBOARD_SKIN = Script.resourcesPath() + "config/keyboard.json";
 
-    var tablet = Tablet.getTablet("com.highfidelity.interface.tablet.system");
+     var tablet = Tablet.getTablet("com.highfidelity.interface.tablet.system");
 
     var buttonProperties = {
         text: "KS"
@@ -12,6 +12,7 @@
     button.clicked.connect(onClicked);
     function onClicked() {
         print(KEYBOARD_SKIN);
+        Keyboard.raised = false;
         Keyboard.loadKeyboardFile(KEYBOARD_SKIN);
     }
 
