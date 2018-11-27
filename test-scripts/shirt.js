@@ -17,8 +17,8 @@ function init() {
         type: "Model",
         modelURL: shirt,
         parentID: MyAvatar.sessionUUID,
+        dimensions: { x: 1.0, y: 1.0, z: 1.0 },
         relayParentJoints: true,
-        position: jointPosition
     };
 
     if (!softEntity) {
