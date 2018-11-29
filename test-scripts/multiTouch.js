@@ -1,6 +1,5 @@
 "use strict"
 
-
 (function() {
     var button = null;
     var buttonName = "MTouch";
