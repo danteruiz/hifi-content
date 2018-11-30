@@ -79,7 +79,6 @@
     function update() {
         var reticlePosition = Reticle.position;
         var pointOnWindow = Window.isPointOnDesktopWindow(reticlePosition);
-        print(pointOnWindow);
     }
 
     function init() {
