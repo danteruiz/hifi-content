@@ -140,9 +140,10 @@
     });
     secondKey = Overlays.addOverlay("model", {
         "solid": true,
-        "parentID": anchor,
+        "parentID": null,
         "visible": true,
-        "url": DEFAULT_KEY_MODEL,
+        "url":  Script.resourcesPath() + "meshes/tablet-with-home-button-small-bezel.fbx", //DEFAULT_KEY_MODEL,
+        "grabbable": true,
         "alpha": 0.7,
         "localPosition": {
             "x": -0.5332040786743164,
@@ -164,7 +165,8 @@
             "file9": Script.resourcesPath() + "meshes/keyboard/key_p.png",
             "file10": Script.resourcesPath() + "meshes/keyboard/key_p.png"
         },
-        "ignoreRayIntersection": false
+        "ignoreRayIntersection": false,
+         isGroupCulled: true
     });
 
     var debugOverlay = Overlays.addOverlay("sphere", {
@@ -191,7 +193,7 @@
                 "orientation": calculateKeyboardOrientation()
             };
             Overlays.editOverlay(anchor, props);
-            Overlays.editOverlay(secondKey, {"visible": true});
+            Overlays.editOverlay(secondKey, props);
         } else {
             props = {"visible": false};
 
