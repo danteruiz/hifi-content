@@ -1,6 +1,6 @@
 name = grayfox_rebuild
 type = body+head
-scale = 0.88
+scale = 1.0
 filename = grayfox_rebuild/grayfox_rebuild.fbx
 texdir = grayfox_rebuild/textures
 joint = jointRightHand = RightHand
