@@ -11,8 +11,6 @@ function Vector() {
 function Quaterion() {
 }
 
-
-
 module.exports = {
     Quaterion: Quaterion,
     Vector: Vector
