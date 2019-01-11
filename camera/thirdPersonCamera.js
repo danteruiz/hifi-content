@@ -65,25 +65,39 @@
         });
     }
 
-    var move = false;
+    var moveX = false;
+    var moveY = false;
+    var lastCameraPosition = Vec3.ZERO;
+    var lastCameraOrientation = Quat.IDENTITY;
+    var lastAvatarOrientation = Quat.IDENTITY;
+    var lastAvatarPosition = Vec3.ZERO;
+
+    var timeStep = 1 / 60;
+    var factor = 0.1;
     function update(deltaTime) {
         // update camera
 
-        /*var thrust = move ? 4 : 0;
+        var thrust = (moveX || moveY) ? 3 : 0;
         MyAvatar.motorMode = "dynamic";
         MyAvatar.motorReferenceFrame = "avatar";
         MyAvatar.motorTimescale = 100000;
-        MyAvatar.motorVelocity = { x: 0.0, y: 0.0, z: thrust }; */
+        MyAvatar.motorVelocity = { x: 0.0, y: 0.0, z: thrust };
 
         var deltaYaw = valueRX * YAW_SPEED * deltaTime;
         var deltaPitch = valueRY * PITCH_SPEED * deltaTime;
 
         pitchOffset += deltaPitch;
         yawOffset += deltaYaw;
+
+        var lerpSpeed = (1 - Math.pow(factor, deltaTime));
+        print(lerpSpeed);
         var negZDirection = Vec3.multiplyQbyV(Quat.multiply(originalOrientation, Quat.fromVec3Radians({x: pitchOffset, y: yawOffset, z: 0.0})), Vec3.UNIT_NEG_Z);
         var cameraOrientation = Quat.multiply(originalOrientation, Quat.fromVec3Radians({x: pitchOffset, y: yawOffset, z: 0.0}));
-        Camera.position = Vec3.sum(MyAvatar.position, Vec3.multiply(bloom, negZDirection));
-        Camera.orientation = cameraOrientation;
+        var targetPosition = lerpVectors(lastAvatarPosition, MyAvatar.position, lerpSpeed);
+        Camera.position = Vec3.sum(targetPosition, Vec3.multiply(bloom, negZDirection));
+        lastCameraPosition = Camera.position;
+        Camera.orientation = Quat.slerp(lastCameraOrientation, cameraOrientation, 1.0);
+        lastCameraOrientation = Camera.orientation;
 
         var cameraCanceledPitchAndRoll = Quat.cancelOutRollAndPitch(cameraOrientation);
         var cameraDirection = Quat.getFront(cameraCanceledPitchAndRoll);
@@ -93,7 +107,15 @@
         var deltaOrientation = Quat.rotationBetween(cameraDirection, leftJoystickDirectionWorldSpace);
         var finalOrientation = Quat.multiply(cameraCanceledPitchAndRoll, deltaOrientation);
 
-        MyAvatar.orientation = Quat.cancelOutRollAndPitch(Quat.slerp(cameraOrientation, finalOrientation, 1.0));
+        MyAvatar.orientation = Quat.cancelOutRollAndPitch(Quat.slerp(lastAvatarOrientation, finalOrientation, 0.1));
+        lastAvatarOrientation = MyAvatar.orientation;
+
+        lastAvatarPosition = MyAvatar.position;
+    }
+
+
+    function lerpVectors(v1, v2, t) {
+        return Vec3.sum(Vec3.multiply((1 -t), v1), Vec3.multiply(t, v2));
     }
 
     var gamepadMapping = Controller.newMapping("ThirdPersonCamera");
@@ -124,17 +146,16 @@
     });
 
     gamepadMapping.from(GAME_PAD.LX).to(function(value) {
-        //print("LX: " + value);
         var passedThreshold = Math.abs(value) > THRESHOLD;
         valueLX = passedThreshold ? value : 0;
-        move = passedThreshold;
+        moveX = passedThreshold;
     });
 
     gamepadMapping.from(GAME_PAD.LY).to(function(value) {
-        print("LY: " + Math.abs(value));
+        //print("LY: " + Math.abs(value));
         var passedThreshold = Math.abs(value) > THRESHOLD;
         valueLY = passedThreshold ? value : 0;
-        move = passedThreshold;
+        moveY = passedThreshold;
     });
 
     gamepadMapping.from(GAME_PAD.RX).to(function(value) {
