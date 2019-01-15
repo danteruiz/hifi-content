@@ -2,22 +2,14 @@
     var webOverlay = Overlays.addOverlay("web3d", {
         visible: true,
         dimensions: { x: 1, y: 1, z: 0 },
-        url: "hifi/tablet/TabletRoot.qml",
-        position: MyAvatar.position,
+        url: Script.resolvePath("qml/RedRectangle.qml"),
+        position: Vec3.sum(MyAvatar.position, Vec3.multiply(2.0, Quat.getFront(MyAvatar.orientation))),
+        orientation: MyAvatar.orientation,
         alpha: 1.0,
-        color: { red: 255, green: 255, blue: 255 },
         dpi: 20
     });
 
-    Script.update.connect(function(deltaTime) {
-        var props = {
-            position: Vec3.sum(Camera.position, Vec3.multiply(Quat.getFront(Camera.orientation), 2)),
-            orientation: Quat.cancelOutPitchAndRoll(MyAvatar.orientation)
-        };
-
-        Overlays.editOverlay(webOverlay, props);
-    });
-
+    print(Script.resolvePath("qml/RedRectangle.qml"));
 
     Script.scriptEnding.connect(function() {
         Overlays.deleteOverlay(webOverlay);
