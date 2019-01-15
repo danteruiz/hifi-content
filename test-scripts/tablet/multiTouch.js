@@ -1,5 +1,3 @@
-"use strict"
-
 (function() {
     var button = null;
     var buttonName = "MTouch";
@@ -10,7 +8,7 @@
     });
 
     function onClicked() {
-        tablet.loadQMLSource("Test.qml");
+        tablet.loadQMLSource(Script.resolvePath("qml/MultiTouch.qml"));
     }
 
     button.clicked.connect(onClicked);
