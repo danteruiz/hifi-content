@@ -77,7 +77,7 @@
                 "albedoMap": "https://dantescalves.com/hifi-content/textures/interstitial.jpg",
                 //"emissiveMap": "https://dantescalves.com/hifi-content/textures/interstitial.jpg"
             }
-        })
+xsxs        })
     }, "local");
 
     var fadeIn = false;
