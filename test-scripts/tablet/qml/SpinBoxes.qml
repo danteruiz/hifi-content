@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import ControlsUit 1.0 as HifiControls
+import controlsUit 1.0 as HifiControls
 import stylesUit 1.0
 
 
