@@ -1,11 +1,7 @@
 (function () {
-
-    function kickRandomUser() {
-        print("Dante: kicking");
-
-        Users.kick("3ceced32-64d6-4507-ae11-8208970f103d");
-        print("kicking user");
-    }
-
-    Script.update.connect(kickRandomUser);
+    var clicked = false;
+    this.clickDownOnEntity = function (entityID, mouseEvent) {
+        var avatars =  AvatarList.getAvatarIdentifiers();
+        Users.kick(avatars[Math.floor(Math.random()*avatars.length)]);
+    };
 });
