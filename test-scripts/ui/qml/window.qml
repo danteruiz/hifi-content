@@ -231,6 +231,34 @@ Rectangle {
         }
     }
 
+
+
+    function generateWindowProperties() {
+        var properties = {};
+
+
+        properties.presentationMode = root.displayMode;
+        if (dockSelected) {
+            properties.presentationWindowInfo = {
+                "dockedArea": root.dockMode
+            }
+        }
+        properties.size = {
+            x: sizeX.realValue,
+            y: sizeY.realValue
+        };
+
+        properties.position = {
+            x: positionX.realValue,
+            y: positionY.realValue
+        };
+
+
+        properties.title = "Test window"
+
+        return properties;
+    }
+
     Controls.Button {
         id: create
         text: "Create Window"
@@ -269,31 +297,8 @@ Rectangle {
 
 
         onClicked: {
-            var properties = {};
-
-
-            properties.presentationMode = root.displayMode;
-            if (dockSelected) {
-                properties.presentationWindowInfo = {
-                    "dockedArea": root.dockMode
-                }
-            }
-            properties.size = {
-                x: sizeX.realValue,
-                y: sizeY.realValue
-            };
-
-            properties.position = {
-                x: positionX.realValue,
-                y: positionY.realValue
-            };
-
-
-            properties.title = "Test window"
-
-
             sendToScript(JSON.stringify({
-                "create": properties}));
+                "create": generateWindowProperties()}));
         }
     }
 
@@ -313,7 +318,8 @@ Rectangle {
         }
 
         onClicked: {
-            var propertiess = {};
+            sendToScript(JSON.stringify({
+                "test": generateWindowProperties()}));
         }
     }
 
@@ -332,8 +338,6 @@ Rectangle {
         }
 
         onClicked: {
-            console.log("close window");
-
              sendToScript("close");
         }
     }

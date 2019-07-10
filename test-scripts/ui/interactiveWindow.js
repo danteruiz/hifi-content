@@ -11,6 +11,15 @@
     });
 
     var testWindow = null;
+    var testProps = null;
+    var testCount = 0;
+
+    function closeWindowIfOpen() {
+        if (testWindow) {
+            testWindow.close();
+            testWindow = null;
+        }
+    }
 
     window.fromQml.connect(function(message) {
         print(message);
@@ -26,32 +35,59 @@
             var data = JSON.parse(message);
 
             if (data.hasOwnProperty('create')) {
-                if (testWindow) {
-                    testWindow.close();
-                    testWindow = null;
-                }
+                closeWindowIfOpen();
 
-                var props = data.create;
-                var presentationModes = Desktop.PresentationMode;
-                var dockAreas = Desktop.DockArea;
-                print(JSON.stringify(presentationModes));
-                props.presentationMode = presentationModes[props.presentationMode];
-                if (props.hasOwnProperty('presentationWindowInfo')) {
-                    print(props.presentationWindowInfo.dockedArea);
-                    var dockedInfo = {
-                        dockArea: dockAreas[props.presentationWindowInfo.dockedArea]
-                    };
-
-                    print(JSON.stringify(dockedInfo));
-
-                    props.presentationWindowInfo = dockedInfo;
-                }
+                var props = convertProperties(data.create);
                 testWindow = Desktop.createWindow(TEST_QML_SOURCE, props);
+            } else if (data.hasOwnProperty('test')) {
+                closeWindowIfOpen();
+                testProps = convertProperties(data.test);
+                testWindow = Desktop.createWindow(TEST_QML_SOURCE, testProps);
+                testCount = 0;
+                Script.setTimeout(updateTest, 200);
             }
         }
     });
 
+    function updateTest() {
+        if (testCount < 50) {
+            if (testWindow) {
+                closeWindowIfOpen();
+                print("closeWindow");
+            } else {
+                print("Creating window");
+                print(JSON.stringify(testProps));
+               testWindow = Desktop.createWindow(TEST_QML_SOURCE, testProps);
+            }
+            testCount++;
+            Script.setTimeout(updateTest, 200);
+        } else {
+            closeWindowIfOpen();
+        }
+    }
+
+    function convertProperties(properties) {
+        var props = properties;
+        var presentationModes = Desktop.PresentationMode;
+        var dockAreas = Desktop.DockArea;
+        props.presentationMode = presentationModes[props.presentationMode];
+        if (props.hasOwnProperty('presentationWindowInfo')) {
+            print(props.presentationWindowInfo.dockedArea);
+            var dockedInfo = {
+                dockArea: dockAreas[props.presentationWindowInfo.dockedArea]
+            };
+
+            print(JSON.stringify(dockedInfo));
+
+            props.presentationWindowInfo = dockedInfo;
+        }
+
+        return props;
+        testWindow = Desktop.createWindow(TEST_QML_SOURCE, props);
+    }
+
     Script.scriptEnding.connect(function() {
+        closeWindowIfOpen();
         window.close();
         window = null;
     });
